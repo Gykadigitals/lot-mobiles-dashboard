@@ -5,12 +5,24 @@ import Label from "@/components/form/Label";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
 import React, { useState } from "react";
+import Select from "@/components/form/Select";
+import { Role } from "@/lib/auth/roles";
+import Protect from "@/components/auth/Protect";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<Role>("PRODUCT_MANAGER");
   return (
-    <div className="flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar">
+    <Protect 
+      allowedRoles={["ADMINISTRATOR"]} 
+      fallback={
+        <div className="flex items-center justify-center h-screen w-full text-gray-500">
+          Only Administrators can access this page to create new users.
+        </div>
+      }
+    >
+      <div className="flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar">
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
         <Link
           href="/"
@@ -111,6 +123,23 @@ export default function SignUpForm() {
                     />
                   </div>
                 </div>
+                {/* <!-- Role --> */}
+                <div>
+                  <Label>
+                    Role<span className="text-error-500">*</span>
+                  </Label>
+                  <Select
+                    options={[
+                      { value: "ADMINISTRATOR", label: "Administrator" },
+                      { value: "PRODUCT_MANAGER", label: "Product Manager" },
+                      { value: "SALES_MANAGER", label: "Sales Manager" },
+                      { value: "MIS", label: "MIS" },
+                      { value: "ORDER_MANAGEMENT", label: "Order Management" },
+                    ]}
+                    defaultValue={selectedRole}
+                    onChange={(val) => setSelectedRole(val as Role)}
+                  />
+                </div>
                 {/* <!-- Email --> */}
                 <div>
                   <Label>
@@ -186,6 +215,7 @@ export default function SignUpForm() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </Protect>
   );
 }
