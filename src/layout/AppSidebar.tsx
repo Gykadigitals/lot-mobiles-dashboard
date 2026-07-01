@@ -11,6 +11,7 @@ import {
   ChevronDown,
   HandCoins,
   MoreHorizontal,
+  List,
 } from "lucide-react";
 import SidebarWidget from "./SidebarWidget";
 
@@ -32,6 +33,7 @@ const navItems: NavItem[] = [
     name: "Business Dashboard",
     subItems: [
       { name: "Sales Analytics", path: "/sales-analytics", pro: false },
+      { name: "Navigation", path: "/navigation", pro: false },
       { name: "Revenue", path: "/revenue", pro: false },
       { name: "Customers", path: "/customers", pro: false },
     ],
@@ -43,7 +45,6 @@ const navItems: NavItem[] = [
       { name: "Orders", path: "/orders", pro: false },
       { name: "Inventory", path: "/inventory", pro: false },
       { name: "Payments", path: "/payments", pro: false },
-
     ],
   },
 
