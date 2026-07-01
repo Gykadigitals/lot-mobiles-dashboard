@@ -74,7 +74,7 @@ export default function NavigationPage() {
           onClick={() => {
             setData({
               ...data,
-              items: [...(data?.items || []), { id: 'new', title: 'New Category', href: '#', columns: [] }]
+              items: [{ id: 'new', title: 'New Category', href: '#', columns: [] }, ...(data?.items || [])]
             });
           }}
           className="mt-6 flex items-center gap-2 text-brand-500 hover:text-brand-600 font-medium"
@@ -147,7 +147,7 @@ function CategoryEditor({ item, onChange, onDelete }: any) {
               ))}
               <button
                 onClick={() => {
-                  const newCols = [...(item.columns || []), { sections: [] }];
+                  const newCols = [{ sections: [] }, ...(item.columns || [])];
                   onChange({ ...item, columns: newCols });
                 }}
                 className="shrink-0 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-white/[0.08] rounded-md w-48 h-full min-h-[200px] text-gray-500 hover:border-brand-500 hover:text-brand-500 transition-colors"
@@ -177,7 +177,7 @@ function CategoryEditor({ item, onChange, onDelete }: any) {
               ))}
               <button
                 onClick={() => {
-                  const newPromos = [...(item.promotions || []), { imageUrl: '', linkUrl: '', altText: '' }];
+                  const newPromos = [{ imageUrl: '', linkUrl: '', altText: '' }, ...(item.promotions || [])];
                   onChange({ ...item, promotions: newPromos });
                 }}
                 className="shrink-0 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-white/[0.08] rounded-md w-64 h-full min-h-[150px] text-gray-500 hover:border-brand-500 hover:text-brand-500 transition-colors"
@@ -218,7 +218,7 @@ function ColumnEditor({ column, onChange, onDelete }: any) {
         ))}
         <button
           onClick={() => {
-            const newSecs = [...(column.sections || []), { title: 'New Section', items: [] }];
+            const newSecs = [{ title: 'New Section', href: '#', links: [] }, ...(column.sections || [])];
             onChange({ ...column, sections: newSecs });
           }}
           className="text-xs flex items-center gap-1 text-brand-500 hover:underline w-full justify-center py-2"
@@ -284,12 +284,12 @@ function SectionEditor({ section, onChange, onDelete }: any) {
         ))}
         <button
           onClick={() => {
-            const newLinks = [...(section.items || []), { label: 'New Link', href: '/' }];
+            const newLinks = [{ label: 'New Link', href: '#', isNew: false, hasIcon: false }, ...(section.items || [])];
             onChange({ ...section, items: newLinks });
           }}
           className="text-xs flex items-center gap-1 text-gray-500 hover:text-brand-500 mt-2"
         >
-          <Plus size={12} /> Add Link
+          <Plus size={14} /> Add Link
         </button>
       </div>
     </div>
