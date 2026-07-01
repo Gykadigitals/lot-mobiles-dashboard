@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Save, Plus, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
+import { Save, Plus, Trash2, ChevronDown, ChevronRight, Upload } from 'lucide-react';
 
 export default function NavigationPage() {
   const [data, setData] = useState<any>(null);
@@ -126,31 +126,66 @@ function CategoryEditor({ item, onChange, onDelete }: any) {
       </div>
 
       {expanded && (
-        <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-white/[0.03] flex gap-6 overflow-x-auto">
-          {item.columns?.map((col: any, colIdx: number) => (
-            <ColumnEditor
-              key={colIdx}
-              column={col}
-              onChange={(newCol) => {
-                const newCols = [...(item.columns || [])];
-                newCols[colIdx] = newCol;
-                onChange({ ...item, columns: newCols });
-              }}
-              onDelete={() => {
-                const newCols = item.columns.filter((_: any, idx: number) => idx !== colIdx);
-                onChange({ ...item, columns: newCols });
-              }}
-            />
-          ))}
-          <button
-            onClick={() => {
-              const newCols = [...(item.columns || []), { sections: [] }];
-              onChange({ ...item, columns: newCols });
-            }}
-            className="shrink-0 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-white/[0.08] rounded-md w-48 h-full min-h-[200px] text-gray-500 hover:border-brand-500 hover:text-brand-500 transition-colors"
-          >
-            <Plus size={24} />
-          </button>
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-white/[0.03] flex flex-col gap-6">
+          <div>
+            <h4 className="text-sm font-semibold mb-3 text-gray-700 dark:text-gray-300">Columns</h4>
+            <div className="flex gap-6 overflow-x-auto pb-2">
+              {item.columns?.map((col: any, colIdx: number) => (
+                <ColumnEditor
+                  key={colIdx}
+                  column={col}
+                  onChange={(newCol) => {
+                    const newCols = [...(item.columns || [])];
+                    newCols[colIdx] = newCol;
+                    onChange({ ...item, columns: newCols });
+                  }}
+                  onDelete={() => {
+                    const newCols = item.columns.filter((_: any, idx: number) => idx !== colIdx);
+                    onChange({ ...item, columns: newCols });
+                  }}
+                />
+              ))}
+              <button
+                onClick={() => {
+                  const newCols = [...(item.columns || []), { sections: [] }];
+                  onChange({ ...item, columns: newCols });
+                }}
+                className="shrink-0 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-white/[0.08] rounded-md w-48 h-full min-h-[200px] text-gray-500 hover:border-brand-500 hover:text-brand-500 transition-colors"
+              >
+                <Plus size={24} />
+              </button>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-200 dark:border-gray-800 pt-4">
+            <h4 className="text-sm font-semibold mb-3 text-gray-700 dark:text-gray-300">Promotions Image</h4>
+            <div className="flex gap-6 overflow-x-auto pb-2">
+              {item.promotions?.map((promo: any, promoIdx: number) => (
+                <PromotionEditor
+                  key={promoIdx}
+                  promotion={promo}
+                  onChange={(newPromo) => {
+                    const newPromos = [...(item.promotions || [])];
+                    newPromos[promoIdx] = newPromo;
+                    onChange({ ...item, promotions: newPromos });
+                  }}
+                  onDelete={() => {
+                    const newPromos = item.promotions.filter((_: any, idx: number) => idx !== promoIdx);
+                    onChange({ ...item, promotions: newPromos });
+                  }}
+                />
+              ))}
+              <button
+                onClick={() => {
+                  const newPromos = [...(item.promotions || []), { imageUrl: '', linkUrl: '', altText: '' }];
+                  onChange({ ...item, promotions: newPromos });
+                }}
+                className="shrink-0 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-white/[0.08] rounded-md w-64 h-full min-h-[150px] text-gray-500 hover:border-brand-500 hover:text-brand-500 transition-colors"
+              >
+                <Plus size={24} />
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -256,6 +291,68 @@ function SectionEditor({ section, onChange, onDelete }: any) {
         >
           <Plus size={12} /> Add Link
         </button>
+      </div>
+    </div>
+  );
+}
+
+
+function PromotionEditor({ promotion, onChange, onDelete }: any) {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        onChange({ ...promotion, imageUrl: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  return (
+    <div className="shrink-0 w-64 border border-gray-200 dark:border-gray-800 rounded-md p-3 bg-gray-50 dark:bg-white/[0.02] relative">
+      <button onClick={onDelete} className="absolute top-2 right-2 text-gray-400 hover:text-red-500">
+        <Trash2 size={14} />
+      </button>
+      <div className="text-xs font-bold uppercase text-gray-500 mb-3 border-b border-gray-200 dark:border-gray-800 pb-2">Promotion</div>
+
+      <div className="space-y-3">
+        <div>
+          <label className="text-xs text-gray-500 block mb-1">Image URL</label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={promotion.imageUrl || ""}
+              onChange={(e) => onChange({ ...promotion, imageUrl: e.target.value })}
+              className="w-full text-sm bg-white dark:bg-white/[0.03] border border-gray-300 dark:border-white/[0.08] rounded px-2 py-1.5 focus:outline-none focus:border-brand-500"
+              placeholder="/images/promo1.jpg"
+            />
+            <label className="shrink-0 flex items-center justify-center cursor-pointer bg-brand-500 text-white rounded p-1.5 hover:bg-brand-600 transition-colors" title="Upload Image">
+              <Upload size={16} />
+              <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+            </label>
+          </div>
+        </div>
+        <div>
+          <label className="text-xs text-gray-500 block mb-1">Link URL</label>
+          <input
+            type="text"
+            value={promotion.linkUrl || ""}
+            onChange={(e) => onChange({ ...promotion, linkUrl: e.target.value })}
+            className="w-full text-sm bg-white dark:bg-white/[0.03] border border-gray-300 dark:border-white/[0.08] rounded px-2 py-1.5 focus:outline-none focus:border-brand-500"
+            placeholder="/products/sale"
+          />
+        </div>
+        <div>
+          <label className="text-xs text-gray-500 block mb-1">Alt Text</label>
+          <input
+            type="text"
+            value={promotion.altText || ""}
+            onChange={(e) => onChange({ ...promotion, altText: e.target.value })}
+            className="w-full text-sm bg-white dark:bg-white/[0.03] border border-gray-300 dark:border-white/[0.08] rounded px-2 py-1.5 focus:outline-none focus:border-brand-500"
+            placeholder="Summer Sale"
+          />
+        </div>
       </div>
     </div>
   );

@@ -34,6 +34,7 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "Sales Analytics", path: "/sales-analytics", pro: false },
       { name: "Navigation", path: "/navigation", pro: false },
+      { name: "Promotions", path: "/promotions", pro: false },
       { name: "Revenue", path: "/revenue", pro: false },
       { name: "Customers", path: "/customers", pro: false },
     ],
