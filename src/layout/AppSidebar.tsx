@@ -12,6 +12,7 @@ import {
   HandCoins,
   MoreHorizontal,
   List,
+  Users,
 } from "lucide-react";
 import SidebarWidget from "./SidebarWidget";
 
@@ -43,6 +44,11 @@ const navItems: NavItem[] = [
       { name: "Brands", path: "/brands", pro: false },
       { name: "Footer", path: "/footer", pro: false },
     ],
+  },
+  {
+    icon: <Users size={20} />,
+    name: "Users",
+    path: "/users",
   },
   {
     icon: <HandCoins size={20} />,
