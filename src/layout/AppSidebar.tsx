@@ -50,6 +50,8 @@ const navItems: NavItem[] = [
     name: "Users",
     path: "/users",
   },
+  { name: "About Page", path: "/about", icon: <Settings size={20} /> },
+
   {
     icon: <HandCoins size={20} />,
     name: "Operations Dashboard",
