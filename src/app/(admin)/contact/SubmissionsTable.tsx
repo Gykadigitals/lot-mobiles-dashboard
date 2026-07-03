@@ -6,7 +6,7 @@ import { Mail, Phone, Calendar, ArrowUpRight, Search, Filter, ChevronLeft, Chevr
 // Mock data to simulate LIFO (Last In, First Out) - Expanded for pagination
 const initialSubmissions = Array.from({ length: 25 }, (_, i) => ({
   id: `SUB-00${25 - i}`,
-  name: `User ${25 - i}`,
+  name: `Ramesh ${25 - i}`,
   email: `user${25 - i}@example.com`,
   phone: `+91 ${9876543210 - i}`,
   serviceType: i % 3 === 0 ? "Sales & Product Inquiry" : i % 3 === 1 ? "Repair Service" : "Technical Support",
@@ -77,17 +77,16 @@ export default function SubmissionsTable() {
           <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
             {paginatedSubmissions.map((sub) => (
               <tr key={sub.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors group">
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400 border border-brand-100 dark:border-brand-500/20">
                       {sub.name}
                     </span>
                     {sub.status === "new" && (
                       <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
                     )}
                   </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                </td><td className="px-6 py-4 whitespace-nowrap">
                   <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400 border border-brand-100 dark:border-brand-500/20">
                     {sub.serviceType}
                   </span>
