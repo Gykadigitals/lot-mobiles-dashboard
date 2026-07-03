@@ -23,7 +23,8 @@ import {
   Star,
   Award,
   PanelBottom,
-  Layout
+  Layout,
+  MessageCircle
 } from "lucide-react";
 import SidebarWidget from "./SidebarWidget";
 
@@ -75,6 +76,7 @@ const navItems: NavItem[] = [
       },
       { icon: <Users size={20} />, name: "Users", path: "/users", },
       { name: "About Page", path: "/about", icon: <Settings size={20} /> },
+      { name: "Contact Page", path: "/contact", icon: <MessageCircle size={20} /> },
     ],
   },
   {
@@ -166,123 +168,121 @@ const AppSidebar: React.FC = () => {
           )}
           {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
             <div
-              className={`grid transition-all duration-300 ease-in-out ${
-                openSubmenu?.type === menuType && openSubmenu?.index === index
-                  ? "grid-rows-[1fr] opacity-100"
-                  : "grid-rows-[0fr] opacity-0"
-              }`}
+              className={`grid transition-all duration-300 ease-in-out ${openSubmenu?.type === menuType && openSubmenu?.index === index
+                ? "grid-rows-[1fr] opacity-100"
+                : "grid-rows-[0fr] opacity-0"
+                }`}
             >
               <div className="overflow-hidden">
                 <ul className="mt-2 space-y-1 ml-5">
-                {nav.subItems.map((subItem, subIndex) => (
-                  <li key={subItem.name}>
-                    {subItem.subItems ? (
-                      <div className="flex flex-col">
-                        <button
-                          onClick={() => handleNestedSubmenuToggle(index, subIndex)}
-                          className={`menu-dropdown-item flex items-center gap-3 py-2 px-3 w-full text-left rounded-md ${openNestedSubmenu?.parentIndex === index && openNestedSubmenu?.nestedIndex === subIndex
-                            ? "bg-brand-50/50 dark:bg-white/[0.02]"
-                            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-white/[0.02] dark:hover:text-gray-200"
-                            }`}
-                        >
-                          {subItem.icon && (
-                            <span className={`shrink-0 ${openNestedSubmenu?.parentIndex === index && openNestedSubmenu?.nestedIndex === subIndex ? "text-brand-500" : "text-gray-400 dark:text-gray-500"}`}>
-                              {subItem.icon}
-                            </span>
-                          )}
-                          <div className="flex flex-col flex-1">
-                            <span className={`font-medium text-sm ${openNestedSubmenu?.parentIndex === index && openNestedSubmenu?.nestedIndex === subIndex ? "text-brand-500" : ""}`}>{subItem.name}</span>
-                            {subItem.subtitle && (
-                              <span className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight mt-0.5">{subItem.subtitle}</span>
-                            )}
-                          </div>
-                          <ChevronDown
-                            className={`ml-auto w-4 h-4 transition-transform duration-200 ${openNestedSubmenu?.parentIndex === index && openNestedSubmenu?.nestedIndex === subIndex
-                              ? "rotate-180 text-brand-500"
-                              : ""
+                  {nav.subItems.map((subItem, subIndex) => (
+                    <li key={subItem.name}>
+                      {subItem.subItems ? (
+                        <div className="flex flex-col">
+                          <button
+                            onClick={() => handleNestedSubmenuToggle(index, subIndex)}
+                            className={`menu-dropdown-item flex items-center gap-3 py-2 px-3 w-full text-left rounded-md ${openNestedSubmenu?.parentIndex === index && openNestedSubmenu?.nestedIndex === subIndex
+                              ? "bg-brand-50/50 dark:bg-white/[0.02]"
+                              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-white/[0.02] dark:hover:text-gray-200"
                               }`}
-                          />
-                        </button>
+                          >
+                            {subItem.icon && (
+                              <span className={`shrink-0 ${openNestedSubmenu?.parentIndex === index && openNestedSubmenu?.nestedIndex === subIndex ? "text-brand-500" : "text-gray-400 dark:text-gray-500"}`}>
+                                {subItem.icon}
+                              </span>
+                            )}
+                            <div className="flex flex-col flex-1">
+                              <span className={`font-medium text-sm ${openNestedSubmenu?.parentIndex === index && openNestedSubmenu?.nestedIndex === subIndex ? "text-brand-500" : ""}`}>{subItem.name}</span>
+                              {subItem.subtitle && (
+                                <span className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight mt-0.5">{subItem.subtitle}</span>
+                              )}
+                            </div>
+                            <ChevronDown
+                              className={`ml-auto w-4 h-4 transition-transform duration-200 ${openNestedSubmenu?.parentIndex === index && openNestedSubmenu?.nestedIndex === subIndex
+                                ? "rotate-180 text-brand-500"
+                                : ""
+                                }`}
+                            />
+                          </button>
 
-                        <div
-                          className={`grid transition-all duration-300 ease-in-out ${
-                            openNestedSubmenu?.parentIndex === index && openNestedSubmenu?.nestedIndex === subIndex 
-                              ? "grid-rows-[1fr] opacity-100" 
+                          <div
+                            className={`grid transition-all duration-300 ease-in-out ${openNestedSubmenu?.parentIndex === index && openNestedSubmenu?.nestedIndex === subIndex
+                              ? "grid-rows-[1fr] opacity-100"
                               : "grid-rows-[0fr] opacity-0"
-                          }`}
-                        >
-                          <div className="overflow-hidden">
-                            <ul className="mt-1 space-y-1 ml-6 border-l border-gray-200 dark:border-gray-800 pl-3">
-                            {subItem.subItems.map((nestedItem) => (
-                              <li key={nestedItem.name}>
-                                <Link
-                                  href={nestedItem.path}
-                                  className={`flex items-center gap-3 py-1.5 px-2 rounded-md transition-colors ${isActive(nestedItem.path)
-                                    ? "bg-brand-50/50 dark:bg-white/[0.02] text-brand-600 dark:text-brand-400"
-                                    : "text-gray-500 dark:text-gray-400 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-white/[0.02] dark:hover:text-gray-200"
-                                    }`}
-                                >
-                                  {nestedItem.icon && (
-                                    <span className={`shrink-0 ${isActive(nestedItem.path) ? "text-brand-500" : "text-gray-400 dark:text-gray-500"}`}>
-                                      {nestedItem.icon}
-                                    </span>
-                                  )}
-                                  <span className="font-medium text-[13px]">{nestedItem.name}</span>
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
+                              }`}
+                          >
+                            <div className="overflow-hidden">
+                              <ul className="mt-1 space-y-1 ml-6 border-l border-gray-200 dark:border-gray-800 pl-3">
+                                {subItem.subItems.map((nestedItem) => (
+                                  <li key={nestedItem.name}>
+                                    <Link
+                                      href={nestedItem.path}
+                                      className={`flex items-center gap-3 py-1.5 px-2 rounded-md transition-colors ${isActive(nestedItem.path)
+                                        ? "bg-brand-50/50 dark:bg-white/[0.02] text-brand-600 dark:text-brand-400"
+                                        : "text-gray-500 dark:text-gray-400 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-white/[0.02] dark:hover:text-gray-200"
+                                        }`}
+                                    >
+                                      {nestedItem.icon && (
+                                        <span className={`shrink-0 ${isActive(nestedItem.path) ? "text-brand-500" : "text-gray-400 dark:text-gray-500"}`}>
+                                          {nestedItem.icon}
+                                        </span>
+                                      )}
+                                      <span className="font-medium text-[13px]">{nestedItem.name}</span>
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ) : (
-                      subItem.path && (
-                        <Link
-                          href={subItem.path}
-                          className={`menu-dropdown-item flex items-start gap-3 py-2 px-3 ${isActive(subItem.path)
-                            ? "menu-dropdown-item-active bg-brand-50/50 dark:bg-white/[0.02]"
-                            : "menu-dropdown-item-inactive"
-                            }`}
-                        >
-                          {subItem.icon && (
-                            <span className={`shrink-0 mt-0.5 ${isActive(subItem.path) ? "text-brand-500" : "text-gray-400 dark:text-gray-500"}`}>
-                              {subItem.icon}
+                      ) : (
+                        subItem.path && (
+                          <Link
+                            href={subItem.path}
+                            className={`menu-dropdown-item flex items-start gap-3 py-2 px-3 ${isActive(subItem.path)
+                              ? "menu-dropdown-item-active bg-brand-50/50 dark:bg-white/[0.02]"
+                              : "menu-dropdown-item-inactive"
+                              }`}
+                          >
+                            {subItem.icon && (
+                              <span className={`shrink-0 mt-0.5 ${isActive(subItem.path) ? "text-brand-500" : "text-gray-400 dark:text-gray-500"}`}>
+                                {subItem.icon}
+                              </span>
+                            )}
+                            <div className="flex flex-col">
+                              <span className="font-medium text-sm">{subItem.name}</span>
+                              {subItem.subtitle && (
+                                <span className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight mt-0.5">{subItem.subtitle}</span>
+                              )}
+                            </div>
+                            <span className="flex items-center gap-1 ml-auto">
+                              {subItem.new && (
+                                <span
+                                  className={`ml-auto ${isActive(subItem.path)
+                                    ? "menu-dropdown-badge-active"
+                                    : "menu-dropdown-badge-inactive"
+                                    } menu-dropdown-badge `}
+                                >
+                                  new
+                                </span>
+                              )}
+                              {subItem.pro && (
+                                <span
+                                  className={`ml-auto ${isActive(subItem.path)
+                                    ? "menu-dropdown-badge-active"
+                                    : "menu-dropdown-badge-inactive"
+                                    } menu-dropdown-badge `}
+                                >
+                                  pro
+                                </span>
+                              )}
                             </span>
-                          )}
-                          <div className="flex flex-col">
-                            <span className="font-medium text-sm">{subItem.name}</span>
-                            {subItem.subtitle && (
-                              <span className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight mt-0.5">{subItem.subtitle}</span>
-                            )}
-                          </div>
-                          <span className="flex items-center gap-1 ml-auto">
-                            {subItem.new && (
-                              <span
-                                className={`ml-auto ${isActive(subItem.path)
-                                  ? "menu-dropdown-badge-active"
-                                  : "menu-dropdown-badge-inactive"
-                                  } menu-dropdown-badge `}
-                              >
-                                new
-                              </span>
-                            )}
-                            {subItem.pro && (
-                              <span
-                                className={`ml-auto ${isActive(subItem.path)
-                                  ? "menu-dropdown-badge-active"
-                                  : "menu-dropdown-badge-inactive"
-                                  } menu-dropdown-badge `}
-                              >
-                                pro
-                              </span>
-                            )}
-                          </span>
-                        </Link>
-                      )
-                    )}
-                  </li>
-                ))}
-              </ul>
+                          </Link>
+                        )
+                      )}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           )}
