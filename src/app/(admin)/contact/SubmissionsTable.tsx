@@ -4,13 +4,13 @@ import React, { useState } from "react";
 import { Mail, Phone, Calendar, ArrowUpRight, Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 
 // Mock data to simulate LIFO (Last In, First Out) - Expanded for pagination
-const initialSubmissions = Array.from({ length: 25 }, (_, i) => ({
-  id: `SUB-00${25 - i}`,
-  name: `Ramesh ${25 - i}`,
-  email: `user${25 - i}@example.com`,
+const initialSubmissions = Array.from({ length: 11 }, (_, i) => ({
+  id: `SUB-00${11 - i}`,
+  name: `Ramesh ${11 - i}`,
+  email: `user${11 - i}@example.com`,
   phone: `+91 ${9876543210 - i}`,
   serviceType: i % 3 === 0 ? "Sales & Product Inquiry" : i % 3 === 1 ? "Repair Service" : "Technical Support",
-  message: `This is a mock message for submission ${25 - i}. Looking for assistance.`,
+  message: `This is a mock message for submission ${11 - i}. Looking for assistance.`,
   date: new Date(Date.now() - i * 86400000).toISOString(),
   status: i < 3 ? "new" : "read",
 }));
