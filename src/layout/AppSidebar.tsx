@@ -87,6 +87,8 @@ const navItems: NavItem[] = [
         subtitle: "Manage Policies",
         subItems: [
           { name: "Cancellation Policy", path: "/cancellation-policy", icon: <FileText size={16} /> },
+          { name: "Return Policy", path: "/return-policy", icon: <FileText size={16} /> },
+          { name: "Disclaimer Policy", path: "/disclaimer-policy", icon: <FileText size={16} /> },
         ]
       },
     ],
