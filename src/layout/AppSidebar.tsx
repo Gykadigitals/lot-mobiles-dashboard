@@ -25,7 +25,8 @@ import {
   PanelBottom,
   Layout,
   MessageCircle,
-  MapPin
+  MapPin,
+  FileText
 } from "lucide-react";
 import SidebarWidget from "./SidebarWidget";
 
@@ -79,6 +80,15 @@ const navItems: NavItem[] = [
       { name: "About Page", path: "/about", icon: <Settings size={20} /> },
       { name: "Contact Page", path: "/contact", icon: <MessageCircle size={20} /> },
       { icon: <MapPin size={20} />, name: "Store Locator", path: "/stores", },
+
+      {
+        name: "Policies",
+        icon: <FileText size={18} />,
+        subtitle: "Manage Policies",
+        subItems: [
+          { name: "Cancellation Policy", path: "/cancellation-policy", icon: <FileText size={16} /> },
+        ]
+      },
     ],
   },
   {
