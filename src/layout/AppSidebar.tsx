@@ -139,9 +139,10 @@ const AppSidebar: React.FC = () => {
                 return { ...subItem, subItems: filteredNested };
               }
               if (subItem.path) {
-                if (subItem.path === "/signin" || subItem.path === "/signup") return true;
+                if (subItem.path === "/signin" || subItem.path === "/signup") return subItem;
                 const allowed = RouteAccess[subItem.path];
-                return allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
+                const isAllowed = allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
+                return isAllowed ? subItem : null;
               }
               return subItem;
             })
@@ -150,9 +151,10 @@ const AppSidebar: React.FC = () => {
           return { ...item, subItems: filteredSubItems };
         }
         if (item.path) {
-           if (item.path === "/" || item.path === "/signin" || item.path === "/signup") return true;
+           if (item.path === "/" || item.path === "/signin" || item.path === "/signup") return item;
            const allowed = RouteAccess[item.path];
-           return allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
+           const isAllowed = allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
+           return isAllowed ? item : null;
         }
         return item;
       })
@@ -168,7 +170,7 @@ const AppSidebar: React.FC = () => {
   ) => (
     <ul className="flex flex-col gap-4">
       {itemsToRender.map((nav, index) => (
-        <li key={nav.name}>
+        <li key={`nav-${nav.name}-${index}`}>
           {nav.subItems ? (
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
@@ -232,7 +234,7 @@ const AppSidebar: React.FC = () => {
               <div className="overflow-hidden">
                 <ul className="mt-2 space-y-1 ml-5">
                   {nav.subItems.map((subItem, subIndex) => (
-                    <li key={subItem.name}>
+                    <li key={`sub-${subItem.name}-${subIndex}`}>
                       {subItem.subItems ? (
                         <div className="flex flex-col">
                           <button
@@ -269,8 +271,8 @@ const AppSidebar: React.FC = () => {
                           >
                             <div className="overflow-hidden">
                               <ul className="mt-1 space-y-1 ml-6 border-l border-gray-200 dark:border-gray-800 pl-3">
-                                {subItem.subItems.map((nestedItem) => (
-                                  <li key={nestedItem.name}>
+                                {subItem.subItems.map((nestedItem, nestedIndex) => (
+                                  <li key={`nested-${nestedItem.name}-${nestedIndex}`}>
                                     <Link
                                       href={nestedItem.path}
                                       className={`flex items-center gap-3 py-1.5 px-2 rounded-md transition-colors ${isActive(nestedItem.path)
