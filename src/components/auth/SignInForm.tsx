@@ -64,6 +64,12 @@ export default function SignInForm() {
       password === process.env.NEXT_PUBLIC_ORDER_MANAGEMENT_PASSWORD
     ) {
       isValid = true;
+    } else if (
+      selectedRole === "HR" &&
+      email === process.env.NEXT_PUBLIC_HR_EMAIL &&
+      password === process.env.NEXT_PUBLIC_HR_PASSWORD
+    ) {
+      isValid = true;
     }
 
     if (isValid) {
@@ -166,6 +172,7 @@ export default function SignInForm() {
                       { value: "SALES_MANAGER", label: "Sales Manager" },
                       { value: "MIS", label: "MIS" },
                       { value: "ORDER_MANAGEMENT", label: "Order Management" },
+                      { value: "HR", label: "HR" },
                     ]}
                     defaultValue={selectedRole}
                     onChange={(val) => setSelectedRole(val as Role)}

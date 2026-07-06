@@ -8,7 +8,7 @@ export default function CancellationPolicyPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  
+
   // Pagination state for sections
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
@@ -120,7 +120,7 @@ export default function CancellationPolicyPage() {
 
       <div className="bg-white dark:bg-white/[0.03] rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 mb-6 space-y-4">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Global Page Settings</h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">Page Title</label>
@@ -175,9 +175,9 @@ export default function CancellationPolicyPage() {
           <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Policy Sections</h2>
           <span className="text-sm text-gray-500">{data.sections.length} total sections</span>
         </div>
-        
+
         {data.sections.length === 0 && <p className="text-gray-500">No sections found.</p>}
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {currentSections.map((section: any, i: number) => {
             const actualIndex = startIndex + i;
@@ -186,47 +186,47 @@ export default function CancellationPolicyPage() {
 
             return (
               <div key={section.id || actualIndex} className="border border-gray-200 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-white/[0.02] flex flex-col relative group">
-                
-                <button 
+
+                <button
                   onClick={() => {
-                    if(confirm('Are you sure you want to delete this section?')) {
-                        const newSections = data.sections.filter((_: any, idx: number) => idx !== actualIndex);
-                        setData({ ...data, sections: newSections });
-                        if (newSections.length > 0 && Math.ceil(newSections.length / itemsPerPage) < currentPage) {
-                           setCurrentPage(Math.max(currentPage - 1, 1));
-                        }
+                    if (confirm('Are you sure you want to delete this section?')) {
+                      const newSections = data.sections.filter((_: any, idx: number) => idx !== actualIndex);
+                      setData({ ...data, sections: newSections });
+                      if (newSections.length > 0 && Math.ceil(newSections.length / itemsPerPage) < currentPage) {
+                        setCurrentPage(Math.max(currentPage - 1, 1));
+                      }
                     }
-                  }} 
+                  }}
                   className="absolute top-3 right-3 bg-white dark:bg-gray-800 p-1.5 rounded-md text-red-500 hover:text-red-700 shadow-sm z-10 opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200 dark:border-gray-700"
                   title="Delete Section"
                 >
                   <Trash2 size={16} />
                 </button>
-                
+
                 <div className="p-5 space-y-4 flex-1 flex flex-col pt-8">
                   <div>
                     <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">Heading (Optional)</label>
                     <input
-                        type="text"
-                        value={section.heading}
-                        onChange={(e) => updateSectionField(actualIndex, 'heading', e.target.value)}
-                        className="w-full text-sm bg-white dark:bg-white/[0.03] border border-gray-300 dark:border-white/[0.08] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors"
-                        placeholder="e.g. OVERVIEW"
+                      type="text"
+                      value={section.heading}
+                      onChange={(e) => updateSectionField(actualIndex, 'heading', e.target.value)}
+                      className="w-full text-sm bg-white dark:bg-white/[0.03] border border-gray-300 dark:border-white/[0.08] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors"
+                      placeholder="e.g. OVERVIEW"
                     />
                   </div>
 
                   <div className="flex-1 flex flex-col gap-3">
                     <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 block mb-1">
-                       Content (Paragraphs / List Items)
+                      Content (Paragraphs / List Items)
                     </label>
-                    
+
                     {(section.content || []).map((paragraph: string, pIndex: number) => (
                       <div key={pIndex} className="relative group/p">
                         <textarea
-                            value={paragraph}
-                            onChange={(e) => updateParagraph(actualIndex, pIndex, e.target.value)}
-                            className="w-full text-sm bg-white dark:bg-white/[0.03] border border-gray-300 dark:border-white/[0.08] rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors min-h-[60px]"
-                            placeholder={`Paragraph ${pIndex + 1}...`}
+                          value={paragraph}
+                          onChange={(e) => updateParagraph(actualIndex, pIndex, e.target.value)}
+                          className="w-full text-sm bg-white dark:bg-white/[0.03] border border-gray-300 dark:border-white/[0.08] rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors min-h-[60px]"
+                          placeholder={`Paragraph ${pIndex + 1}...`}
                         />
                         <button
                           onClick={() => deleteParagraph(actualIndex, pIndex)}

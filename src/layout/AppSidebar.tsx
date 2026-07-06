@@ -29,6 +29,8 @@ import {
   FileText
 } from "lucide-react";
 import SidebarWidget from "./SidebarWidget";
+import { useRBAC } from "../hooks/useRBAC";
+import { RouteAccess } from "../lib/auth/roles";
 
 type NavItem = {
   name: string;
@@ -119,13 +121,53 @@ const othersItems: NavItem[] = [
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const pathname = usePathname();
+  const { hasRole } = useRBAC();
+
+  const filterNavItems = (items: NavItem[]): NavItem[] => {
+    return items
+      .map((item) => {
+        if (item.subItems) {
+          const filteredSubItems = item.subItems
+            .map((subItem) => {
+              if (subItem.subItems) {
+                const filteredNested = subItem.subItems.filter((nested) => {
+                  if (nested.path === "/signin" || nested.path === "/signup") return true;
+                  const allowed = RouteAccess[nested.path];
+                  return allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
+                });
+                if (filteredNested.length === 0) return null;
+                return { ...subItem, subItems: filteredNested };
+              }
+              if (subItem.path) {
+                if (subItem.path === "/signin" || subItem.path === "/signup") return true;
+                const allowed = RouteAccess[subItem.path];
+                return allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
+              }
+              return subItem;
+            })
+            .filter(Boolean) as typeof item.subItems;
+          if (!filteredSubItems || filteredSubItems.length === 0) return null;
+          return { ...item, subItems: filteredSubItems };
+        }
+        if (item.path) {
+           if (item.path === "/" || item.path === "/signin" || item.path === "/signup") return true;
+           const allowed = RouteAccess[item.path];
+           return allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
+        }
+        return item;
+      })
+      .filter(Boolean) as NavItem[];
+  };
+
+  const filteredNavItems = filterNavItems(navItems);
+  const filteredOthersItems = filterNavItems(othersItems);
 
   const renderMenuItems = (
-    navItems: NavItem[],
+    itemsToRender: NavItem[],
     menuType: "main" | "others"
   ) => (
     <ul className="flex flex-col gap-4">
-      {navItems.map((nav, index) => (
+      {itemsToRender.map((nav, index) => (
         <li key={nav.name}>
           {nav.subItems ? (
             <button
@@ -448,7 +490,7 @@ const AppSidebar: React.FC = () => {
                   <MoreHorizontal />
                 )}
               </h2>
-              {renderMenuItems(navItems, "main")}
+              {renderMenuItems(filteredNavItems, "main")}
             </div>
 
             <div className="">
@@ -464,7 +506,7 @@ const AppSidebar: React.FC = () => {
                   <MoreHorizontal />
                 )}
               </h2>
-              {renderMenuItems(othersItems, "others")}
+              {renderMenuItems(filteredOthersItems, "others")}
             </div>
           </div>
         </nav>
