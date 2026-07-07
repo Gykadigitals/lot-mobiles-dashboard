@@ -40,6 +40,11 @@ export async function POST(request: Request) {
   country: string;
 }
 
+export interface LastLogin {
+  location: string;
+  timestamp: string; // ISO string or formatted date string
+}
+
 export interface CustomerData {
   id: string;
   name: string;
@@ -53,6 +58,7 @@ export interface CustomerData {
   department: string;
   memberSince: string;
   emailVerified: boolean;
+  lastLogin?: LastLogin;
   addresses?: Address[];
 }
 

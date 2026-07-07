@@ -159,6 +159,33 @@ function ProfileTab({ customer }: { customer: any }) {
           </p>
         </div>
       </div>
+
+      {customer.lastLogin && (
+        <div className="mt-4 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-800">
+          <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-3 flex items-center gap-2">
+            <Calendar size={16} className="text-brand-500" />
+            Recent Login Activity
+          </h3>
+          <div className="flex flex-col sm:flex-row gap-6">
+            <div>
+              <p className="text-xs text-gray-500 mb-1">Location</p>
+              <p className="font-medium text-gray-900 dark:text-white text-sm flex items-center gap-1">
+                <MapPin size={14} className="text-gray-400" />
+                {customer.lastLogin.location}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 mb-1">Date & Time</p>
+              <p className="font-medium text-gray-900 dark:text-white text-sm flex items-center gap-1">
+                {new Date(customer.lastLogin.timestamp).toLocaleString(undefined, { 
+                  year: 'numeric', month: 'short', day: 'numeric', 
+                  hour: '2-digit', minute: '2-digit' 
+                })}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
