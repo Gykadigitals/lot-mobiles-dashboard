@@ -1,27 +1,28 @@
 "use client";
-
 import React, { useState, useEffect } from 'react';
-import { Save, Plus, Trash2, Camera, User, Phone, MapPin, Mail, Briefcase, Calendar, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Save, Plus, Trash2, Camera, User, Phone, MapPin, Mail, Briefcase, Calendar, CheckCircle, ChevronLeft, ChevronRight, Eye, Search } from 'lucide-react';
+import Link from 'next/link';
 
-export default function UsersPage() {
+export default function CustomersPage() {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
   useEffect(() => {
-    fetch('/api/users')
+    fetch('/api/customers')
       .then(res => res.json())
       .then(d => {
         setData(d || []);
         setLoading(false);
       })
       .catch(e => {
-        setError('Failed to load users data');
+        setError('Failed to load customers data');
         setLoading(false);
       });
   }, []);
@@ -29,25 +30,25 @@ export default function UsersPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const res = await fetch('/api/users', {
+      const res = await fetch('/api/customers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error('Save failed');
-      alert('Users saved successfully!');
+      alert('Customers saved successfully!');
     } catch (e: any) {
       alert(e.message);
     }
     setSaving(false);
   };
 
-  const handleAddUser = () => {
-    const newId = `user-${Date.now()}`;
-    const newUser = {
+  const handleAddCustomer = () => {
+    const newId = `customer-${Date.now()}`;
+    const newCustomer = {
       id: newId,
-      name: 'New User',
-      email: 'user@example.com',
+      name: 'New Customer',
+      email: 'customer@example.com',
       avatar: '',
       sex: 'Male',
       mobile: '0000000000',
@@ -58,9 +59,7 @@ export default function UsersPage() {
       memberSince: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
       emailVerified: false
     };
-    // LIFO: Add to the beginning of the array
-    setData([newUser, ...data]);
-    // Reset to first page so they see the newly added user
+    setData([newCustomer, ...data]);
     setCurrentPage(1);
   };
 
@@ -78,26 +77,27 @@ export default function UsersPage() {
   };
 
   // Pagination logic
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const filteredData = data.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = data.slice(startIndex, startIndex + itemsPerPage);
+  const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
-  if (loading) return <div className="p-6">Loading users data...</div>;
+  if (loading) return <div className="p-6">Loading customers data...</div>;
   if (error) return <div className="p-6 text-red-500">{error}</div>;
 
   return (
     <div className="p-6 w-full mx-auto text-gray-900 dark:text-gray-100">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
         <div>
-          <h1 className="font-medium text-brand-500 text-theme-lg dark:text-white/90 sm:text-2xl">Users Management</h1>
+          <h1 className="font-medium text-brand-500 text-theme-lg dark:text-white/90 sm:text-2xl">Customers Management</h1>
           <p className="text-sm text-gray-500 mt-1">Manage customer profiles and account details.</p>
         </div>
         <div className="flex items-center gap-3">
           <button
-            onClick={handleAddUser}
+            onClick={handleAddCustomer}
             className="flex items-center gap-2 bg-white dark:bg-white/[0.03] border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-white px-4 py-2 rounded-md hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-colors"
           >
-            <Plus size={18} /> Add New User
+            <Plus size={18} /> Add New Customer
           </button>
           <button
             onClick={handleSave}
@@ -109,41 +109,56 @@ export default function UsersPage() {
         </div>
       </div>
 
+      <div className="mb-6 relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+        <input 
+          type="text" 
+          placeholder="Search customers..." 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-800 rounded-xl bg-gray-50 dark:bg-[#111827] focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+        />
+      </div>
+
       <div className="space-y-6">
-        {data.length === 0 && (
+        {filteredData.length === 0 && (
           <div className="bg-white dark:bg-white/[0.03] rounded-2xl p-6 text-center text-gray-500 border border-gray-200 dark:border-gray-800">
-            No users found. Add a new user to get started.
+            No customers found.
           </div>
         )}
         
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          {currentData.map((user, i) => {
-            const actualIndex = startIndex + i;
+          {currentData.map((customer, i) => {
+            const actualIndex = data.findIndex(c => c.id === customer.id);
             return (
-              <div key={actualIndex} className="bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-3xl p-6 shadow-sm relative overflow-hidden flex flex-col gap-6">
+              <div key={customer.id} className="bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-3xl p-6 shadow-sm relative overflow-hidden flex flex-col gap-6">
                 
-                {/* Delete Button */}
-                <button 
-                  onClick={() => {
-                    if(confirm('Are you sure you want to delete this user?')) {
-                      const newData = data.filter((_, idx) => idx !== actualIndex);
-                      setData(newData);
-                      if (newData.length > 0 && Math.ceil(newData.length / itemsPerPage) < currentPage) {
-                        setCurrentPage(Math.max(currentPage - 1, 1));
+                <div className="absolute top-4 right-4 flex items-center gap-1">
+                  <Link 
+                    href={`/customers/${customer.id}`}
+                    className="text-gray-400 hover:text-brand-500 transition-colors p-2"
+                    title="View Customer Details"
+                  >
+                    <Eye size={18} />
+                  </Link>
+                  <button 
+                    onClick={() => {
+                      if(confirm('Are you sure you want to delete this customer?')) {
+                        const newData = data.filter((_, idx) => idx !== actualIndex);
+                        setData(newData);
                       }
-                    }
-                  }} 
-                  className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors p-2"
-                  title="Delete User"
-                >
-                  <Trash2 size={18} />
-                </button>
+                    }} 
+                    className="text-gray-400 hover:text-red-500 transition-colors p-2"
+                    title="Delete Customer"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
 
-                {/* Profile Header section */}
                 <div className="flex items-center gap-5 pr-10">
                   <div className="w-20 h-20 rounded-full border-4 border-gray-50 dark:border-gray-800 overflow-hidden relative group shrink-0">
-                    {user.avatar ? (
-                      <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                    {customer.avatar ? (
+                      <img src={customer.avatar} alt="Avatar" className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-400">
                         <User size={32} />
@@ -157,23 +172,23 @@ export default function UsersPage() {
                   <div className="flex-1 min-w-0">
                     <input
                       type="text"
-                      value={user.name}
+                      value={customer.name}
                       onChange={(e) => {
                         const newData = [...data];
-                        newData[actualIndex] = { ...user, name: e.target.value };
+                        newData[actualIndex] = { ...customer, name: e.target.value };
                         setData(newData);
                       }}
                       className="text-xl font-bold text-gray-900 dark:text-white bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-gray-700 focus:border-brand-500 focus:outline-none w-full truncate pb-1 transition-colors"
-                      placeholder="User Name"
+                      placeholder="Customer Name"
                     />
                     <div className="flex items-center text-sm text-gray-500 mt-1 gap-2">
                       <Mail size={14} />
                       <input
                         type="email"
-                        value={user.email}
+                        value={customer.email}
                         onChange={(e) => {
                           const newData = [...data];
-                          newData[actualIndex] = { ...user, email: e.target.value };
+                          newData[actualIndex] = { ...customer, email: e.target.value };
                           setData(newData);
                         }}
                         className="bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-gray-700 focus:border-brand-500 focus:outline-none w-full truncate pb-1 transition-colors"
@@ -183,47 +198,42 @@ export default function UsersPage() {
                   </div>
                 </div>
 
-                {/* Info Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-6 gap-x-4 pt-4 border-t border-gray-100 dark:border-gray-800/50">
-                  
-                  {/* Phone */}
                   <div>
                     <p className="text-xs font-medium text-gray-500 flex items-center gap-1 mb-1"><Phone size={12} /> Mobile</p>
                     <input
                       type="text"
-                      value={user.mobile}
+                      value={customer.mobile}
                       onChange={(e) => {
                         const newData = [...data];
-                        newData[actualIndex] = { ...user, mobile: e.target.value };
+                        newData[actualIndex] = { ...customer, mobile: e.target.value };
                         setData(newData);
                       }}
                       className="w-full text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-gray-700 focus:border-brand-500 focus:outline-none pb-1"
                     />
                   </div>
 
-                  {/* Location */}
                   <div>
                     <p className="text-xs font-medium text-gray-500 flex items-center gap-1 mb-1"><MapPin size={12} /> Location</p>
                     <input
                       type="text"
-                      value={user.location}
+                      value={customer.location}
                       onChange={(e) => {
                         const newData = [...data];
-                        newData[actualIndex] = { ...user, location: e.target.value };
+                        newData[actualIndex] = { ...customer, location: e.target.value };
                         setData(newData);
                       }}
                       className="w-full text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-gray-700 focus:border-brand-500 focus:outline-none pb-1"
                     />
                   </div>
 
-                  {/* Account Type */}
                   <div>
                     <p className="text-xs font-medium text-gray-500 flex items-center gap-1 mb-1"><Briefcase size={12} /> Account Type</p>
                     <select
-                      value={user.accountType}
+                      value={customer.accountType}
                       onChange={(e) => {
                         const newData = [...data];
-                        newData[actualIndex] = { ...user, accountType: e.target.value };
+                        newData[actualIndex] = { ...customer, accountType: e.target.value };
                         setData(newData);
                       }}
                       className="w-full text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-gray-700 focus:border-brand-500 focus:outline-none pb-1"
@@ -234,14 +244,13 @@ export default function UsersPage() {
                     </select>
                   </div>
 
-                  {/* Status */}
                   <div>
                     <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
                     <select
-                      value={user.status}
+                      value={customer.status}
                       onChange={(e) => {
                         const newData = [...data];
-                        newData[actualIndex] = { ...user, status: e.target.value };
+                        newData[actualIndex] = { ...customer, status: e.target.value };
                         setData(newData);
                       }}
                       className="w-full text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-gray-700 focus:border-brand-500 focus:outline-none pb-1"
@@ -252,44 +261,41 @@ export default function UsersPage() {
                     </select>
                   </div>
 
-                  {/* Department */}
                   <div>
                     <p className="text-xs font-medium text-gray-500 mb-1">Department</p>
                     <input
                       type="text"
-                      value={user.department}
+                      value={customer.department}
                       onChange={(e) => {
                         const newData = [...data];
-                        newData[actualIndex] = { ...user, department: e.target.value };
+                        newData[actualIndex] = { ...customer, department: e.target.value };
                         setData(newData);
                       }}
                       className="w-full text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-gray-700 focus:border-brand-500 focus:outline-none pb-1"
                     />
                   </div>
 
-                  {/* Member Since */}
                   <div>
                     <p className="text-xs font-medium text-gray-500 flex items-center gap-1 mb-1"><Calendar size={12} /> Member Since</p>
                     <input
                       type="text"
-                      value={user.memberSince}
+                      value={customer.memberSince}
                       onChange={(e) => {
                         const newData = [...data];
-                        newData[actualIndex] = { ...user, memberSince: e.target.value };
+                        newData[actualIndex] = { ...customer, memberSince: e.target.value };
                         setData(newData);
                       }}
                       className="w-full text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-gray-700 focus:border-brand-500 focus:outline-none pb-1"
                     />
                   </div>
                   
-                  {/* Sex */}
                   <div>
                     <p className="text-xs font-medium text-gray-500 mb-1">Sex</p>
                     <select
-                      value={user.sex}
+                      value={customer.sex}
                       onChange={(e) => {
                         const newData = [...data];
-                        newData[actualIndex] = { ...user, sex: e.target.value };
+                        newData[actualIndex] = { ...customer, sex: e.target.value };
                         setData(newData);
                       }}
                       className="w-full text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-gray-700 focus:border-brand-500 focus:outline-none pb-1"
@@ -300,34 +306,30 @@ export default function UsersPage() {
                     </select>
                   </div>
 
-                  {/* Email Verification Toggle */}
                   <div className="col-span-2 sm:col-span-1">
                     <p className="text-xs font-medium text-gray-500 mb-1">Verification</p>
                     <button
                       onClick={() => {
                         const newData = [...data];
-                        newData[actualIndex] = { ...user, emailVerified: !user.emailVerified };
+                        newData[actualIndex] = { ...customer, emailVerified: !customer.emailVerified };
                         setData(newData);
                       }}
-                      className={`flex items-center gap-1.5 text-sm font-bold pb-1 transition-colors ${user.emailVerified ? 'text-green-500 hover:text-green-600' : 'text-red-500 hover:text-red-600'}`}
+                      className={`flex items-center gap-1.5 text-sm font-bold pb-1 transition-colors ${customer.emailVerified ? 'text-green-500 hover:text-green-600' : 'text-red-500 hover:text-red-600'}`}
                     >
                       <CheckCircle size={16} />
-                      {user.emailVerified ? 'Email Verified' : 'Unverified'}
+                      {customer.emailVerified ? 'Email Verified' : 'Unverified'}
                     </button>
                   </div>
-                  
                 </div>
-
               </div>
             );
           })}
         </div>
 
-        {/* Pagination Controls */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between pt-4 bg-white dark:bg-white/[0.03] p-4 rounded-xl border border-gray-200 dark:border-gray-800 mt-6">
             <span className="text-sm text-gray-500">
-              Showing {data.length === 0 ? 0 : startIndex + 1} to {Math.min(startIndex + itemsPerPage, data.length)} of {data.length} users
+              Showing {filteredData.length === 0 ? 0 : startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredData.length)} of {filteredData.length} customers
             </span>
             <div className="flex items-center gap-2">
               <button

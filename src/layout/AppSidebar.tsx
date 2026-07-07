@@ -78,7 +78,7 @@ const navItems: NavItem[] = [
           { name: "Footer", path: "/footer", icon: <PanelBottom size={16} /> },
         ]
       },
-      { icon: <Users size={20} />, name: "Users", path: "/users", },
+      { icon: <Users size={20} />, name: "Customers", path: "/customers", },
       { name: "About Page", path: "/about", icon: <Settings size={20} /> },
       { name: "Contact Page", path: "/contact", icon: <MessageCircle size={20} /> },
       { icon: <MapPin size={20} />, name: "Store Locator", path: "/stores", },
@@ -368,7 +368,11 @@ const AppSidebar: React.FC = () => {
     });
   };
 
-  const isActive = useCallback((path: string) => path === pathname, [pathname]);
+  const isActive = useCallback((path: string) => {
+    if (path === pathname) return true;
+    if (path === '/customers' && pathname.startsWith('/customers/')) return true;
+    return false;
+  }, [pathname]);
 
   useEffect(() => {
     // Check if the current path matches any submenu item
