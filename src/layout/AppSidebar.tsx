@@ -26,7 +26,8 @@ import {
   Layout,
   MessageCircle,
   MapPin,
-  FileText
+  FileText,
+  HelpCircle
 } from "lucide-react";
 import SidebarWidget from "./SidebarWidget";
 import { useRBAC } from "../hooks/useRBAC";
@@ -81,6 +82,7 @@ const navItems: NavItem[] = [
       { icon: <Users size={20} />, name: "Customers", path: "/customers", },
       { name: "About Page", path: "/about", icon: <Settings size={20} /> },
       { name: "Contact Page", path: "/contact", icon: <MessageCircle size={20} /> },
+      { name: "FAQ Page", path: "/faq", icon: <HelpCircle size={20} /> },
       { icon: <MapPin size={20} />, name: "Store Locator", path: "/stores", },
 
       {
@@ -92,6 +94,9 @@ const navItems: NavItem[] = [
           { name: "Return Policy", path: "/return-policy", icon: <FileText size={16} /> },
           { name: "Disclaimer Policy", path: "/disclaimer-policy", icon: <FileText size={16} /> },
           { name: "Privacy Policy", path: "/privacy-policy", icon: <FileText size={16} /> },
+          { name: "Terms & Conditions", path: "/terms-and-conditions", icon: <FileText size={16} /> },
+          { name: "Shipping Policy", path: "/shipping-policy", icon: <FileText size={16} /> },
+          { name: "Replacement Policy", path: "/replacement-policy", icon: <FileText size={16} /> },
         ]
       },
     ],
