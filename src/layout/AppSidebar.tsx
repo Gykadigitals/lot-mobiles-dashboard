@@ -123,10 +123,7 @@ const othersItems: NavItem[] = [
   {
     icon: <Settings size={20} />,
     name: "Settings",
-    subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
-    ],
+    path: "/settings",
   },
 ];
 
@@ -143,7 +140,6 @@ const AppSidebar: React.FC = () => {
             .map((subItem) => {
               if (subItem.subItems) {
                 const filteredNested = subItem.subItems.filter((nested) => {
-                  if (nested.path === "/signin" || nested.path === "/signup") return true;
                   const allowed = RouteAccess[nested.path];
                   return allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
                 });
@@ -151,7 +147,6 @@ const AppSidebar: React.FC = () => {
                 return { ...subItem, subItems: filteredNested };
               }
               if (subItem.path) {
-                if (subItem.path === "/signin" || subItem.path === "/signup") return subItem;
                 const allowed = RouteAccess[subItem.path];
                 const isAllowed = allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
                 return isAllowed ? subItem : null;
@@ -163,7 +158,7 @@ const AppSidebar: React.FC = () => {
           return { ...item, subItems: filteredSubItems };
         }
         if (item.path) {
-          if (item.path === "/" || item.path === "/signin" || item.path === "/signup") return item;
+          if (item.path === "/") return item;
           const allowed = RouteAccess[item.path];
           const isAllowed = allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
           return isAllowed ? item : null;
