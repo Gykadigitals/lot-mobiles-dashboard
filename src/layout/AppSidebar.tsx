@@ -27,7 +27,8 @@ import {
   MessageCircle,
   MapPin,
   FileText,
-  HelpCircle
+  HelpCircle,
+  ShieldCheck
 } from "lucide-react";
 import SidebarWidget from "./SidebarWidget";
 import { useRBAC } from "../hooks/useRBAC";
@@ -82,8 +83,8 @@ const navItems: NavItem[] = [
       { icon: <Users size={20} />, name: "Customers", path: "/customers", },
       { name: "About Page", path: "/about", icon: <Settings size={20} /> },
       { name: "Contact Page", path: "/contact", icon: <MessageCircle size={20} /> },
-      { name: "FAQ Page", path: "/faq", icon: <HelpCircle size={20} /> },
       { icon: <MapPin size={20} />, name: "Store Locator", path: "/stores", },
+      { name: "FAQ Page", path: "/faq", icon: <HelpCircle size={20} /> },
 
       {
         name: "Policies",
@@ -114,6 +115,11 @@ const navItems: NavItem[] = [
 ];
 
 const othersItems: NavItem[] = [
+  {
+    icon: <ShieldCheck size={20} />,
+    name: "User Management",
+    path: "/users",
+  },
   {
     icon: <Settings size={20} />,
     name: "Settings",
@@ -157,10 +163,10 @@ const AppSidebar: React.FC = () => {
           return { ...item, subItems: filteredSubItems };
         }
         if (item.path) {
-           if (item.path === "/" || item.path === "/signin" || item.path === "/signup") return item;
-           const allowed = RouteAccess[item.path];
-           const isAllowed = allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
-           return isAllowed ? item : null;
+          if (item.path === "/" || item.path === "/signin" || item.path === "/signup") return item;
+          const allowed = RouteAccess[item.path];
+          const isAllowed = allowed ? hasRole(allowed) : hasRole(["ADMINISTRATOR"]);
+          return isAllowed ? item : null;
         }
         return item;
       })
@@ -377,6 +383,7 @@ const AppSidebar: React.FC = () => {
   const isActive = useCallback((path: string) => {
     if (path === pathname) return true;
     if (path === '/customers' && pathname.startsWith('/customers/')) return true;
+    if (path === '/users' && pathname.startsWith('/users/')) return true;
     return false;
   }, [pathname]);
 
