@@ -44,6 +44,7 @@ export const RouteAccess: Record<string, Role[]> = {
   "/cancellation-policy": ["ADMINISTRATOR", "HR"],
   "/return-policy": ["ADMINISTRATOR", "HR"],
   "/disclaimer-policy": ["ADMINISTRATOR", "HR"],
+  "/privacy-policy": ["ADMINISTRATOR", "HR"],
   // Add more specific routes as needed
 };
 
