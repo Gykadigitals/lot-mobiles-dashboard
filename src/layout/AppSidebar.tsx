@@ -28,7 +28,9 @@ import {
   MapPin,
   FileText,
   HelpCircle,
-  ShieldCheck
+  ShieldCheck,
+  ShoppingCart,
+  ListTodo
 } from "lucide-react";
 import SidebarWidget from "./SidebarWidget";
 import { useRBAC } from "../hooks/useRBAC";
@@ -80,11 +82,19 @@ const navItems: NavItem[] = [
           { name: "Footer", path: "/footer", icon: <PanelBottom size={16} /> },
         ]
       },
-      { icon: <Users size={20} />, name: "Customers", path: "/customers", },
+      { name: "Customers", path: "/customers", icon: <Users size={20} /> },
       { name: "About Page", path: "/about", icon: <Settings size={20} /> },
       { name: "Contact Page", path: "/contact", icon: <MessageCircle size={20} /> },
-      { icon: <MapPin size={20} />, name: "Store Locator", path: "/stores", },
+      { name: "Store Locator", path: "/stores", icon: <MapPin size={20} />, },
       { name: "FAQ Page", path: "/faq", icon: <HelpCircle size={20} /> },
+
+      {
+        icon: <ShoppingCart size={20} />,
+        name: "Product Catalog",
+        subItems: [
+          { name: "Products", path: "/products", icon: <ListTodo size={20} /> },
+        ],
+      },
 
       {
         name: "Policies",
@@ -106,9 +116,7 @@ const navItems: NavItem[] = [
     icon: <HandCoins size={20} />,
     name: "Operations Dashboard",
     subItems: [
-      { name: "Orders", path: "/orders", pro: false },
-      { name: "Inventory", path: "/inventory", pro: false },
-      { name: "Payments", path: "/payments", pro: false },
+      { icon: <Blocks size={20} />, name: "Payments", path: "/payments", },
     ],
   },
 
@@ -116,15 +124,18 @@ const navItems: NavItem[] = [
 
 const othersItems: NavItem[] = [
   {
-    icon: <ShieldCheck size={20} />,
-    name: "User Management",
-    path: "/users",
-  },
-  {
     icon: <Settings size={20} />,
     name: "Settings",
-    path: "/settings",
+    subItems: [
+      {
+        icon: <ShieldCheck size={20} />,
+        name: "User Management",
+        path: "/users",
+      },
+    ],
   },
+
+
 ];
 
 const AppSidebar: React.FC = () => {
