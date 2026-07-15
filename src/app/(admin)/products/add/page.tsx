@@ -43,22 +43,102 @@ interface SpecificationCategory {
   items: SpecificationItem[];
 }
 
-const DEFAULT_SPECS_CATEGORIES = [
+const ALL_SPECS_CATEGORIES = [
   "General",
-  "Memory & Storage",
-  "Display",
   "Dimensions",
-  "OS & Processor",
-  "Battery",
+  "Display",
+  "Processor",
+  "Memory & Storage",
   "Camera",
+  "Battery",
   "Connectivity",
   "Multimedia",
+  "Audio Features",
+  "Features",
+  "Video Features",
+  "Product Details",
+  "In the Box",
   "Warranty",
-  "Manufacturing"
+  "Manufacturing, Packing & Imported Info",
+  "Remote Control Features",
+  "Power Features",
+  "Network & Connectivity",
+  "Remote Control Features"
 ];
 
-const getInitialSpecs = (): SpecificationCategory[] => {
-  return DEFAULT_SPECS_CATEGORIES.map((cat, idx) => ({
+const MOBILES_SPECS_CATEGORIES = [
+  "General",
+  "Dimensions",
+  "Display",
+  "Processor",
+  "Memory & Storage",
+  "Camera",
+  "Battery",
+  "Connectivity",
+  "Multimedia",
+  "Audio Features",
+  "Features",
+  "Video Features",
+  "Product Details",
+  "In the Box",
+  "Warranty",
+  "Manufacturing, Packing & Imported Info",
+  "Remote Control Features"
+];
+
+const TVS_SPECS_CATEGORIES = [
+  "General",
+  "Dimensions",
+  "Display",
+  "Processor",
+  "Memory & Storage",
+  "Camera",
+  "Power Features",
+  "Connectivity",
+  "Multimedia",
+  "Audio Features",
+  "Features",
+  "Battery",
+  "Product Details",
+  "In the Box",
+  "Warranty",
+  "Manufacturing, Packing & Imported Info",
+  "Video Features",
+  "Remote Control Features"
+];
+
+const LAPTOPS_SPECS_CATEGORIES = [
+  "General",
+  "Dimensions",
+  "Display",
+  "Processor",
+  "Memory & Storage",
+  "Camera",
+  "Power Features",
+  "Connectivity",
+  "Multimedia",
+  "Audio Features",
+  "Features",
+  "Battery",
+  "Product Details",
+  "In the Box",
+  "Warranty",
+  "Manufacturing, Packing & Imported Info",
+  "Video Features"
+];
+
+const getInitialSpecs = (category: string): SpecificationCategory[] => {
+  let specsList = ALL_SPECS_CATEGORIES;
+
+  if (category === 'Mobiles') {
+    specsList = MOBILES_SPECS_CATEGORIES;
+  } else if (category === 'TV' || category === 'TVs' || category === "TV's") {
+    specsList = TVS_SPECS_CATEGORIES;
+  } else if (category === 'Laptop' || category === 'Laptops' || category === "Laptop's") {
+    specsList = LAPTOPS_SPECS_CATEGORIES;
+  }
+
+  return specsList.map((cat, idx) => ({
     id: `cat-${idx}-${Date.now()}`,
     name: cat,
     items: [{ id: `item-${Date.now()}-${idx}`, type: 'text', key: '', value: '' }]
@@ -108,8 +188,8 @@ export default function AddProductPage() {
   const [relatedImages, setRelatedImages] = useState<string[]>([]);
 
   useEffect(() => {
-    setSpecCategories(getInitialSpecs());
-  }, []);
+    setSpecCategories(getInitialSpecs(selectedCategory));
+  }, [selectedCategory]);
 
   // --- Specifications Handlers ---
   const handleAddSpecCategory = () => {
@@ -886,7 +966,7 @@ export default function AddProductPage() {
             <div className="bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm overflow-hidden animate-in fade-in slide-in-from-right-4 duration-500 p-6">
               <div className="mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Product Images</h2>
-                <p className="text-sm text-gray-500 mt-1">Upload high-resolution feature images for the product detail page.</p>
+                <p className="text-sm text-gray-500 mt-1">Upload high resolution feature images for the product detail page.</p>
               </div>
 
               <div className="space-y-6">
