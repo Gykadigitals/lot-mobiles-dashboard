@@ -127,7 +127,26 @@ const LAPTOPS_SPECS_CATEGORIES = [
   "Video Features"
 ];
 
-const getInitialSpecs = (category: string): SpecificationCategory[] => {
+const SMARTWATCH_SPECS_CATEGORIES = [
+  "General",
+  "Dimensions",
+  "Display",
+  "Processor",
+  "Audio Features",
+  "Video Features",
+  "Fitness And Heart Rate",
+  "Warranty",
+  "Memory",
+  "Connectivity Features",
+  "Camera",
+  "Features",
+  "Battery",
+  "Product Details",
+  "In the Box",
+  "Manufacturing, Packing and Imported Info"
+];
+
+const getInitialSpecs = (category: string, type: string = ''): SpecificationCategory[] => {
   let specsList = ALL_SPECS_CATEGORIES;
 
   if (category === 'Mobiles') {
@@ -136,6 +155,8 @@ const getInitialSpecs = (category: string): SpecificationCategory[] => {
     specsList = TVS_SPECS_CATEGORIES;
   } else if (category === 'Laptop' || category === 'Laptops' || category === "Laptop's") {
     specsList = LAPTOPS_SPECS_CATEGORIES;
+  } else if (category === 'Accessories' && (type === 'Smart Watch' || type === 'Smart Watches')) {
+    specsList = SMARTWATCH_SPECS_CATEGORIES;
   }
 
   return specsList.map((cat, idx) => ({
@@ -188,8 +209,8 @@ export default function AddProductPage() {
   const [relatedImages, setRelatedImages] = useState<string[]>([]);
 
   useEffect(() => {
-    setSpecCategories(getInitialSpecs(selectedCategory));
-  }, [selectedCategory]);
+    setSpecCategories(getInitialSpecs(selectedCategory, selectedType));
+  }, [selectedCategory, selectedType]);
 
   // --- Specifications Handlers ---
   const handleAddSpecCategory = () => {
