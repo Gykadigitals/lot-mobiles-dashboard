@@ -63,7 +63,10 @@ const ALL_SPECS_CATEGORIES = [
   "Remote Control Features",
   "Power Features",
   "Network & Connectivity",
-  "Remote Control Features"
+  "Remote Control Features",
+  "Special Features",
+  "Air flow & filter features",
+  "Performance"
 ];
 
 const MOBILES_SPECS_CATEGORIES = [
@@ -146,6 +149,141 @@ const SMARTWATCH_SPECS_CATEGORIES = [
   "Manufacturing, Packing and Imported Info"
 ];
 
+const WIRELESS_HEADPHONE_SPECS_CATEGORIES = [
+  "General",
+  "Dimensions",
+  "Display",
+  "Audio Features",
+  "Memory",
+  "Connectivity",
+  "Connectivity Features",
+  "Camera",
+  "Features",
+  "Special Features",
+  "Battery",
+  "Product Details",
+  "In the Box",
+  "Warranty",
+  "Manufacturing",
+  "Manufacturing, Packing and Imported Info",
+  "Video Features",
+  "Remote Control Features"
+];
+
+const WIRED_HEADPHONE_SPECS_CATEGORIES = [
+  "General",
+  "Dimensions",
+  "Display",
+  "Audio Features",
+  "Memory",
+  "Connectivity",
+  "Connectivity Features",
+  "Features",
+  "Special Features",
+  "Battery",
+  "Product Details",
+  "In the Box",
+  "Warranty",
+  "Manufacturing",
+  "Manufacturing, Packing and Imported Info"
+];
+
+const HOME_THEATRE_SPECS_CATEGORIES = [
+  "General",
+  "Dimensions",
+  "Display",
+  "Audio Features",
+  "Memory",
+  "Connectivity",
+  "Connectivity Features",
+  "Features",
+  "Special Features",
+  "Battery",
+  "Product Details",
+  "In the Box",
+  "Warranty",
+  "Manufacturing",
+  "Manufacturing, Packing and Imported Info"
+];
+
+const SOUND_BAR_SPECS_CATEGORIES = [
+  "General",
+  "Dimensions",
+  "Display",
+  "Audio Features",
+  "Memory",
+  "Connectivity",
+  "Connectivity Features",
+  "Features",
+  "Special Features",
+  "Battery",
+  "Product Details",
+  "In the Box",
+  "Warranty",
+  "Manufacturing",
+  "Manufacturing, Packing and Imported Info"
+];
+
+const POWER_BANK_SPECS_CATEGORIES = [
+  "General",
+  "Dimensions",
+  "Display",
+  "Connectivity",
+  "Connectivity Features",
+  "Features",
+  "Special Features",
+  "Battery",
+  "Product Details",
+  "In the Box",
+  "Warranty",
+  "Manufacturing",
+  "Manufacturing, Packing and Imported Info"
+];
+
+const TABLETS_SPECS_CATEGORIES = [
+  "General",
+  "Dimensions",
+  "Display",
+  "Processor",
+  "Memory & Storage",
+  "Camera",
+  "Battery",
+  "Connectivity",
+  "Multimedia",
+  "Audio Features",
+  "Features",
+  "Video Features",
+  "Product Details",
+  "In the Box",
+  "Warranty",
+  "Manufacturing, Packing & Imported Info",
+  "Pencils Control Features"
+];
+
+const AC_SPECS_CATEGORIES = [
+  "General",
+  "Dimensions",
+  "Display",
+  "Performance",
+  "Audio Features",
+  "Memory",
+  "Connectivity",
+  "Connectivity Features",
+  "Camera",
+  "Features",
+  "Air Flow & Filter Features",
+  "Battery",
+  "Power Features",
+  "Product Details",
+  "Special Features",
+  "In the Box",
+  "Warranty",
+  "Manufacturing",
+  "Manufacturing, Packing and Imported Info",
+  "Video Features",
+  "Remote Control Features"
+];
+
 const getInitialSpecs = (category: string, type: string = ''): SpecificationCategory[] => {
   let specsList = ALL_SPECS_CATEGORIES;
 
@@ -155,8 +293,22 @@ const getInitialSpecs = (category: string, type: string = ''): SpecificationCate
     specsList = TVS_SPECS_CATEGORIES;
   } else if (category === 'Laptop' || category === 'Laptops' || category === "Laptop's") {
     specsList = LAPTOPS_SPECS_CATEGORIES;
+  } else if (category === 'Tablet' || category === 'Tablets' || category === "Tablet's") {
+    specsList = TABLETS_SPECS_CATEGORIES;
+  } else if (category === 'AC' || category === 'ACs' || category === "AC's") {
+    specsList = AC_SPECS_CATEGORIES;
   } else if (category === 'Accessories' && (type === 'Smart Watch' || type === 'Smart Watches')) {
     specsList = SMARTWATCH_SPECS_CATEGORIES;
+  } else if (type === 'Wireless Headphone' || type === 'Wireless Headphones') {
+    specsList = WIRELESS_HEADPHONE_SPECS_CATEGORIES;
+  } else if (type === 'Wired Headphone' || type === 'Wired Headphones') {
+    specsList = WIRED_HEADPHONE_SPECS_CATEGORIES;
+  } else if (type === 'Home Theatre' || type === 'Home Theatres') {
+    specsList = HOME_THEATRE_SPECS_CATEGORIES;
+  } else if (type === 'Sound Bar' || type === 'Sound Bars') {
+    specsList = SOUND_BAR_SPECS_CATEGORIES;
+  } else if (type === 'Power Bank' || type === 'Power Banks') {
+    specsList = POWER_BANK_SPECS_CATEGORIES;
   }
 
   return specsList.map((cat, idx) => ({

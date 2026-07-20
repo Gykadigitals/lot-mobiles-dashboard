@@ -200,7 +200,7 @@ export const AllOrdersTable: React.FC<AllOrdersTableProps> = ({ orders, onUpdate
                 </TableCell>
 
                 <TableCell isHeader className="py-3 whitespace-nowrap font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Delivery Type</TableCell>
-                <TableCell isHeader className="py-3 whitespace-nowrap font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Staff</TableCell>
+                <TableCell isHeader className="py-3 whitespace-nowrap font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Assigned To</TableCell>
                 <TableCell isHeader className="py-3 whitespace-nowrap font-medium text-gray-500 text-end text-theme-xs dark:text-gray-400 sticky right-0 z-10 bg-white dark:bg-gray-900/95 backdrop-blur-sm shadow-[-8px_0_10px_-4px_rgba(0,0,0,0.05)] dark:shadow-[-8px_0_10px_-4px_rgba(0,0,0,0.2)]">Actions</TableCell>
               </TableRow>
             </TableHeader>
