@@ -83,6 +83,7 @@ const navItems: NavItem[] = [
         ]
       },
       { name: "Customers", path: "/customers", icon: <Users size={20} /> },
+      { name: "All Orders", path: "/allorders", icon: <ListTodo size={20} /> },
       { name: "About Page", path: "/about", icon: <Settings size={20} /> },
       { name: "Contact Page", path: "/contact", icon: <MessageCircle size={20} /> },
       { name: "Store Locator", path: "/stores", icon: <MapPin size={20} />, },
