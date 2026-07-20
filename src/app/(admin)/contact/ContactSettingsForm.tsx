@@ -112,7 +112,7 @@ export default function ContactSettingsForm() {
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 bg-gray-50 dark:bg-gray-800 dark:text-white transition-all text-sm resize-none h-[42px] overflow-y-auto"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 bg-gray-50 dark:bg-gray-800 dark:text-white transition-all text-sm resize-y min-h-[42px] overflow-y-auto"
               />
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function ContactSettingsForm() {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 bg-gray-50 dark:bg-gray-800 dark:text-white transition-all text-sm resize-none h-[42px] overflow-y-auto"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 bg-gray-50 dark:bg-gray-800 dark:text-white transition-all text-sm resize-y min-h-[42px] overflow-y-auto"
               />
             </div>
             <div className="space-y-2">
