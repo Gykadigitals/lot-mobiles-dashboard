@@ -59,7 +59,7 @@ export default function NavigationPage() {
           <CategoryEditor
             key={i}
             item={item}
-            onChange={(newItem) => {
+            onChange={(newItem: any) => {
               const newItems = [...data.items];
               newItems[i] = newItem;
               setData({ ...data, items: newItems });
@@ -134,7 +134,7 @@ function CategoryEditor({ item, onChange, onDelete }: any) {
                 <ColumnEditor
                   key={colIdx}
                   column={col}
-                  onChange={(newCol) => {
+                  onChange={(newCol: any) => {
                     const newCols = [...(item.columns || [])];
                     newCols[colIdx] = newCol;
                     onChange({ ...item, columns: newCols });
@@ -164,7 +164,7 @@ function CategoryEditor({ item, onChange, onDelete }: any) {
                 <PromotionEditor
                   key={promoIdx}
                   promotion={promo}
-                  onChange={(newPromo) => {
+                  onChange={(newPromo: any) => {
                     const newPromos = [...(item.promotions || [])];
                     newPromos[promoIdx] = newPromo;
                     onChange({ ...item, promotions: newPromos });
@@ -205,7 +205,7 @@ function ColumnEditor({ column, onChange, onDelete }: any) {
           <SectionEditor
             key={secIdx}
             section={sec}
-            onChange={(newSec) => {
+            onChange={(newSec: any) => {
               const newSecs = [...(column.sections || [])];
               newSecs[secIdx] = newSec;
               onChange({ ...column, sections: newSecs });
