@@ -3,7 +3,24 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Plus, Search, User, Shield, Mail, Phone, LayoutGrid, LayoutList, MoreVertical, Edit, Trash2, X } from 'lucide-react';
-import { Role } from '@/lib/auth/roles';
+import { Role, RouteAccess } from '@/lib/auth/roles';
+import { navItems } from '@/layout/AppSidebar';
+
+// Helper to flatten nav items into just the paths and names
+const extractRoutes = (items: any[]): { name: string, path: string }[] => {
+  let routes: { name: string, path: string }[] = [];
+  items.forEach(item => {
+    if (item.path) {
+      routes.push({ name: item.name, path: item.path });
+    }
+    if (item.subItems) {
+      routes = [...routes, ...extractRoutes(item.subItems)];
+    }
+  });
+  return routes;
+};
+
+const allSidebarRoutes = extractRoutes(navItems);
 
 // Mock data for users
 const initialUsers = [
@@ -48,6 +65,18 @@ export default function UsersPage() {
     role: 'PRODUCT_MANAGER' as Role,
   });
 
+  const [showAddRoleModal, setShowAddRoleModal] = useState(false);
+  const [newRoleName, setNewRoleName] = useState('');
+  const [availableRoles, setAvailableRoles] = useState<string[]>([
+    "ADMINISTRATOR",
+    "PRODUCT_MANAGER",
+    "SALES_MANAGER",
+    "MIS",
+    "ORDER_MANAGEMENT",
+    "HR"
+  ]);
+  const [newRoleRoutes, setNewRoleRoutes] = useState<string[]>([]);
+
   // To simulate logged in user's role (For requirement: Only Admin can create Admin)
   const loggedInUserRole: Role = 'ADMINISTRATOR';
 
@@ -57,13 +86,13 @@ export default function UsersPage() {
     user.role.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const getRoleBadgeColor = (role: Role) => {
+  const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case 'ADMINISTRATOR': return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400';
       case 'PRODUCT_MANAGER': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
       case 'SALES_MANAGER': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
       case 'HR': return 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400';
-      default: return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
+      default: return 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400';
     }
   };
 
@@ -74,7 +103,7 @@ export default function UsersPage() {
       name: newUserFormData.name || 'New User',
       email: newUserFormData.email || 'newuser@lotmobiles.com',
       phone: newUserFormData.phone,
-      role: newUserFormData.role,
+      role: newUserFormData.role as Role,
       status: 'Active',
       avatar: '',
     };
@@ -86,6 +115,25 @@ export default function UsersPage() {
       phone: '',
       role: 'PRODUCT_MANAGER' as Role,
     });
+  };
+
+  const handleAddRoleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newRoleName && !availableRoles.includes(newRoleName)) {
+      setAvailableRoles([...availableRoles, newRoleName]);
+      // If this was hooked to a backend, we would also save the newRoleRoutes here.
+    }
+    setShowAddRoleModal(false);
+    setNewRoleName('');
+    setNewRoleRoutes([]);
+  };
+
+  const handleRouteToggle = (route: string) => {
+    setNewRoleRoutes(prev => 
+      prev.includes(route) 
+        ? prev.filter(r => r !== route)
+        : [...prev, route]
+    );
   };
 
   const handleDelete = (id: string) => {
@@ -103,12 +151,20 @@ export default function UsersPage() {
         </div>
         <div className="flex items-center gap-3">
           {loggedInUserRole === 'ADMINISTRATOR' && (
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="flex items-center gap-2 bg-brand-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-brand-600 transition-colors shadow-sm"
-            >
-              <Plus size={18} /> Add New User
-            </button>
+            <>
+              <button
+                onClick={() => setShowAddRoleModal(true)}
+                className="flex items-center gap-2 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm"
+              >
+                <Plus size={18} /> Add New Role
+              </button>
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="flex items-center gap-2 bg-brand-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-brand-600 transition-colors shadow-sm"
+              >
+                <Plus size={18} /> Add New User
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -334,12 +390,11 @@ export default function UsersPage() {
                   onChange={(e) => setNewUserFormData({ ...newUserFormData, role: e.target.value as Role })}
                   className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-[#111827] focus:outline-none focus:ring-2 focus:ring-brand-500 text-gray-900 dark:text-white text-sm appearance-none"
                 >
-                  <option value="ADMINISTRATOR">Administrator</option>
-                  <option value="PRODUCT_MANAGER">Product Manager</option>
-                  <option value="SALES_MANAGER">Sales Manager</option>
-                  <option value="MIS">MIS</option>
-                  <option value="ORDER_MANAGEMENT">Order Management</option>
-                  <option value="HR">HR</option>
+                  {availableRoles.map(role => (
+                    <option key={role} value={role}>
+                      {role.replace(/_/g, ' ')}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="flex items-center gap-3 mt-4">
@@ -355,6 +410,68 @@ export default function UsersPage() {
                   className="flex-1 py-2.5 bg-brand-500 text-white rounded-xl text-sm font-medium hover:bg-brand-600 transition-colors shadow-sm"
                 >
                   Create User
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add New Role Modal */}
+      {showAddRoleModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-3xl p-6 md:p-8 w-full max-w-md shadow-2xl relative">
+            <button
+              onClick={() => setShowAddRoleModal(false)}
+              className="absolute top-6 right-6 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            >
+              <X size={20} />
+            </button>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Add New Role</h2>
+
+            <form onSubmit={handleAddRoleSubmit} className="flex flex-col gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Role Name</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. MARKETING MANAGER"
+                  value={newRoleName}
+                  onChange={(e) => setNewRoleName(e.target.value.toUpperCase().replace(/\s+/g, '_'))}
+                  className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-[#111827] focus:outline-none focus:ring-2 focus:ring-brand-500 text-gray-900 dark:text-white text-sm"
+                />
+                <p className="text-xs text-gray-500 mt-1.5">Spaces will be automatically converted to underscores.</p>
+              </div>
+
+              <div className="mt-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Accessible Pages</label>
+                <div className="max-h-52 overflow-y-auto pr-2 grid grid-cols-1 sm:grid-cols-2 gap-2 custom-scrollbar border border-gray-200 dark:border-gray-800 rounded-xl p-3 bg-gray-50/50 dark:bg-[#111827]/50">
+                  {allSidebarRoutes.map((routeObj, idx) => (
+                    <label key={`${routeObj.path}-${idx}`} className="flex items-center gap-2.5 cursor-pointer p-2 rounded-lg hover:bg-white dark:hover:bg-gray-800 border border-transparent hover:border-gray-200 dark:hover:border-gray-700 hover:shadow-sm transition-all">
+                      <input 
+                        type="checkbox" 
+                        checked={newRoleRoutes.includes(routeObj.path)}
+                        onChange={() => handleRouteToggle(routeObj.path)}
+                        className="w-4 h-4 text-brand-500 rounded border-gray-300 dark:border-gray-600 focus:ring-brand-500 dark:bg-gray-700"
+                      />
+                      <span className="text-sm text-gray-600 dark:text-gray-300 capitalize">{routeObj.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowAddRoleModal(false)}
+                  className="flex-1 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 bg-brand-500 text-white rounded-xl text-sm font-medium hover:bg-brand-600 transition-colors shadow-sm"
+                >
+                  Create Role
                 </button>
               </div>
             </form>

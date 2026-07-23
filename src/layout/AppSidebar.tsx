@@ -55,7 +55,7 @@ type NavItem = {
   }[];
 };
 
-const navItems: NavItem[] = [
+export const navItems: NavItem[] = [
   {
     icon: <LayoutDashboard size={20} />, // You can use a HomeIcon if available, but GridIcon works for now
     name: "Main Overview",
