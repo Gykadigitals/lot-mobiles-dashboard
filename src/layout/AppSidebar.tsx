@@ -123,7 +123,7 @@ export const navItems: NavItem[] = [
 
 ];
 
-const othersItems: NavItem[] = [
+export const othersItems: NavItem[] = [
   {
     icon: <Settings size={20} />,
     name: "Settings",
@@ -132,6 +132,11 @@ const othersItems: NavItem[] = [
         icon: <ShieldCheck size={20} />,
         name: "User Management",
         path: "/users",
+      },
+      {
+        icon: <ShieldCheck size={20} />,
+        name: "Role Management",
+        path: "/roles",
       },
     ],
   },
@@ -391,6 +396,7 @@ const AppSidebar: React.FC = () => {
     if (path === pathname) return true;
     if (path === '/customers' && pathname.startsWith('/customers/')) return true;
     if (path === '/users' && pathname.startsWith('/users/')) return true;
+    if (path === '/roles' && pathname.startsWith('/roles/')) return true;
     return false;
   }, [pathname]);
 
