@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Plus, Search, Shield, Edit, Trash2, Eye } from 'lucide-react';
+import { Plus, Search, Shield, Edit, Ban, CheckCircle, Eye } from 'lucide-react';
 import { RoleService } from '@/services/role.service';
 
 // Mock data for roles until backend is wired up
@@ -33,10 +33,13 @@ export default function RolesPage() {
     }
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this role?')) {
-      setRoles(roles.filter(r => r.id !== id));
-    }
+  const handleToggleStatus = (id: string) => {
+    setRoles(roles.map(role => {
+      if (role.id === id) {
+        return { ...role, status: role.status === 'Active' ? 'Inactive' : 'Active' };
+      }
+      return role;
+    }));
   };
 
   return (
@@ -45,7 +48,7 @@ export default function RolesPage() {
         <h2 className="text-xl font-semibold text-gray-800 dark:text-white/90">
           Role Management
         </h2>
-        
+
         <div className="flex items-center gap-4">
           <nav>
             <ol className="flex items-center gap-1.5">
@@ -114,10 +117,18 @@ export default function RolesPage() {
                   <span className="font-medium text-gray-700 dark:text-gray-300">{role.userCount}</span> users
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`flex items-center gap-1.5 text-xs font-semibold ${role.status === 'Active' ? 'text-green-600' : 'text-red-600'}`}>
-                    <span className={`w-2 h-2 rounded-full ${role.status === 'Active' ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                    {role.status}
-                  </span>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={role.status === 'Active'}
+                      onChange={() => handleToggleStatus(role.id)}
+                    />
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-brand-500"></div>
+                    <span className="ml-2 text-xs font-medium text-gray-500 dark:text-gray-400">
+                      {role.status === 'Active' ? 'On' : 'Off'}
+                    </span>
+                  </label>
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-2">
@@ -135,13 +146,6 @@ export default function RolesPage() {
                     >
                       <Edit size={16} />
                     </Link>
-                    <button
-                      onClick={() => handleDelete(role.id)}
-                      className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
-                      title="Delete Role"
-                    >
-                      <Trash2 size={16} />
-                    </button>
                   </div>
                 </td>
               </tr>
