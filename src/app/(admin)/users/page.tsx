@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Plus, Search, User, Shield, Mail, Phone, LayoutGrid, LayoutList, MoreVertical, Edit, Trash2, X } from 'lucide-react';
 import { Role, RouteAccess } from '@/lib/auth/roles';
 import { navItems } from '@/layout/AppSidebar';
+import { RoleService } from '@/services/role.service';
 
 // Helper to flatten nav items into just the paths and names
 const extractRoutes = (items: any[]): { name: string, path: string }[] => {
@@ -117,11 +118,18 @@ export default function UsersPage() {
     });
   };
 
-  const handleAddRoleSubmit = (e: React.FormEvent) => {
+  const handleAddRoleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newRoleName && !availableRoles.includes(newRoleName)) {
-      setAvailableRoles([...availableRoles, newRoleName]);
-      // If this was hooked to a backend, we would also save the newRoleRoutes here.
+      try {
+        // Calling our newly implemented API service as a reference
+        await RoleService.createRole({ name: newRoleName, permissions: newRoleRoutes });
+        setAvailableRoles([...availableRoles, newRoleName]);
+      } catch (error) {
+        console.error("Failed to create role:", error);
+        alert("Failed to save role in backend.");
+        return;
+      }
     }
     setShowAddRoleModal(false);
     setNewRoleName('');
